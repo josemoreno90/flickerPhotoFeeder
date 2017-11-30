@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MySite</title>
+</head>
+<body>
+  <div class="grid-container centered">
+    <div class="grid-100">
+      <div class="contained">
+        <div class="grid-100">
+          <div class="heading">
+            <h1>Flickr Photo Feeder</h1>
+            <p>Choose which kind of animal you'd like to return photos of...</p>
+          </div>
+          <ul class="filter-select">
+            <li><button>flowers</button></li>
+            <li><button>trees</button></li>
+            <li><button>grass</button></li>
+          </ul>
+        </div>
+
+        <div id="photos">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+<link rel="stylesheet" href="css/styles.css">
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+<script>
+
+  $(document).ready(function() {
+    $('button').click(function () {
+
+      var flickerAPI = "https://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
+      var animal = $(this).text();
+      var flickrOptions = {
+        tags: animal,
+        format: "json"
+      };
+      
+      function displayPhotos(data) {
+        var photoHTML = '<ul>'
+        $.each( data.items, function (i, photo) {
+          photoHTML += '<li class="grid-25 tablet-grid-50">';
+          photoHTML += '<a href="' + photo.link + '" + class="image">';
+          photoHTML += '<img src="' + photo.media.m + '"</a></li>';
+        })
+        photoHTML += '</ul>';
+        $('#photos').html(photoHTML);
+      }
+      $.getJSON(flickerAPI, flickrOptions, displayPhotos)
+    })
+  })
+
+</script>
+
+
+</body>
+</html>
